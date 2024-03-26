@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:tp_note/views/home_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tp_note/router/app_router.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GoRouter _router = AppRouter().router;
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      routerConfig: _router,
     );
   }
 }
