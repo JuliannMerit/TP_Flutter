@@ -5,10 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tp_note/notifier/GuessListNotifier.dart';
 
 import '../models/level.dart';
+import '../models/score.dart';
 
 class GameScreen extends ConsumerWidget {
-  GameScreen({required this.level, required this.numberToGuess, Key? key})
-      : super(key: key);
+  GameScreen({required this.level, required this.numberToGuess, Key? key}) : super(key: key);
 
   final Level level;
 
@@ -45,26 +45,21 @@ class GameScreen extends ConsumerWidget {
             ),
             ElevatedButton.icon(
               icon: const Icon(Icons.check),
-              label: Text(numberToGuess.toString()),
+              label: const Text("Valider" /*numberToGuess.toString()*/),
               onPressed: () {
                 String guess = _numberController.text;
                 if (guess.isEmpty || int.tryParse(guess) == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                          'Entrez un nombre compris entre ${level
-                              .minScale} et ${level.maxScale}'),
+                      content: Text('Entrez un nombre compris entre ${level.minScale} et ${level.maxScale}'),
                       duration: const Duration(seconds: 3),
                     ),
                   );
                 } else {
-                  if (int.parse(guess) < level.minScale ||
-                      int.parse(guess) > level.maxScale) {
+                  if (int.parse(guess) < level.minScale || int.parse(guess) > level.maxScale) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                            'Entrez un nombre compris entre ${level
-                                .minScale} et ${level.maxScale}'),
+                        content: Text('Entrez un nombre compris entre ${level.minScale} et ${level.maxScale}'),
                         duration: const Duration(seconds: 3),
                       ),
                     );
@@ -75,14 +70,11 @@ class GameScreen extends ConsumerWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('Perdu'),
-                            content: const Text(
-                                'Vous avez dépassé le nombre d\'essais autorisés'),
+                            content: const Text('Vous avez dépassé le nombre d\'essais autorisés'),
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  ref
-                                      .read(intNotifierProvider.notifier)
-                                      .clearIntList();
+                                  ref.read(intNotifierProvider.notifier).clearIntList();
                                   context.go('/home');
                                 },
                                 child: const Text('Retourner au menu Home'),
@@ -99,34 +91,40 @@ class GameScreen extends ConsumerWidget {
                             return AlertDialog(
                               title: const Text('Gagné'),
                               content: Text(
-                                  'Vous avez trouvé le nombre mystère. \n Votre score est de ${(level
-                                      .tryCount - intList.length) * 10 *
-                                      level.id + 10}'),
+                                  'Vous avez trouvé le nombre mystère.\nVotre score est de ${(level.tryCount - intList.length) * 10 * level.id + 10}'),
                               actions: [
-                                TextButton(
-                                  onPressed: () async {
-                                    SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                    prefs.setStringList('scores', [
-                                      ...?prefs.getStringList('scores'),
-                                      '${getUserName().toString()} : ${(level
-                                          .tryCount - intList.length) * 10}'
-                                    ]);
-                                    ref
-                                        .read(intNotifierProvider.notifier)
-                                        .clearIntList();
-                                    context.go('/home');
+                                FutureBuilder<String>(
+                                  future: getUserName(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      return TextButton(
+                                        onPressed: () async {
+                                          Score score = Score(
+                                            niveau: level,
+                                            name: snapshot.data!,
+                                            score: (level.tryCount - intList.length) * 10 * level.id + 10,
+                                          );
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                                          prefs.setStringList('scores', [
+                                            ...?prefs.getStringList('scores'),
+                                            score.toString(),
+                                          ]);
+                                          ref.read(intNotifierProvider.notifier).clearIntList();
+                                          context.go('/home');
+                                        },
+                                        child: const Text('Retourner au menu Home'),
+                                      );
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
                                   },
-                                  child: const Text('Retourner au menu Home'),
                                 ),
                               ],
                             );
                           },
                         );
                       }
-                      ref
-                          .read(intNotifierProvider.notifier)
-                          .addInt(int.parse(guess));
+                      ref.read(intNotifierProvider.notifier).addInt(int.parse(guess));
                     }
                   }
                 }
@@ -148,28 +146,23 @@ class GameScreen extends ConsumerWidget {
             Text('Valeur minimum = ${level.minScale}'),
             Text('Valeur maximum = ${level.maxScale}'),
             Text('Nombre d\'essais réalisés= ${intList.length}'),
-            Text(
-                'Nombre d\'essais restants = ${level.tryCount -
-                    intList.length}'),
+            Text('Nombre d\'essais restants = ${level.tryCount - intList.length}'),
           ]),
           const Padding(padding: EdgeInsets.all(10)),
           Column(
             children: [
               ...intList.map(
-                    (e) =>
-                    Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.only(bottom: 10, top: 5),
-                      height: 30,
-                      width: 280,
-                      color: Colors.blue,
-                      child: Text(
-                        'Nombre : ${e.toString()} - ${e == numberToGuess
-                            ? 'Trouvé'
-                            : e > numberToGuess ? 'Trop grand' : 'Trop petit'}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
+                (e) => Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(bottom: 10, top: 5),
+                  height: 30,
+                  width: 280,
+                  color: Colors.blue,
+                  child: Text(
+                    'Nombre : ${e.toString()} - ${e == numberToGuess ? 'Trouvé' : e > numberToGuess ? 'Trop grand' : 'Trop petit'}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
               )
             ],
           ),
@@ -190,14 +183,25 @@ class GameScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Game Screen'),
       ),
-      body: const Center(
-          child: Column(
-        children: [
-          Text("Ecran de jeu"),
-        ],
-      )),
+      body: Center(
+          child: FutureBuilder<String>(
+            future: getUserName(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Hello ${snapshot.data}')
+                  ],
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          )),
     );
   }
+}
 
   Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

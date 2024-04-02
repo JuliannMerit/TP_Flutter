@@ -25,6 +25,6 @@ class Level {
 
 List<Level> levels = [
   Level(1, 'Facile', 1, 20, 5),
-  Level(2, 'Moyen', 1, 50, 8),
-  Level(3, 'Difficile', 1, 100, 15),
+  Level(2, 'Moyen', 1, 50, 7),
+  Level(3, 'Difficile', 1, 100, 9),
 ];

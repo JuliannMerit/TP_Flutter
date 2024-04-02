@@ -72,10 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           value: niveau.name,
                           child: Text(
                             niveau.name,
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                         ),
                       )
@@ -83,8 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   value: _selectedLevel.name,
                   onChanged: (String? value) {
                     setState(() {
-                      _selectedLevel = _niveaux
-                          .firstWhere((Level niveau) => niveau.name == value);
+                      _selectedLevel = _niveaux.firstWhere((Level niveau) => niveau.name == value);
                     });
                   },
                 ),
@@ -94,16 +90,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                    'Echelle : ${_selectedLevel.minScale} - ${_selectedLevel.maxScale}'),
+                Text('Echelle : ${_selectedLevel.minScale} - ${_selectedLevel.maxScale}'),
                 Text("Nombre d'essais : ${_selectedLevel.tryCount}")
               ],
             ),
             ElevatedButton(
-                child: const Text('Start a game'),
+                child: const Text('Lancer une partie'),
                 onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
                   prefs.setString('username', _userNameController.text);
                   context.go('/game/$_selectedLevel');
                 }),
@@ -111,6 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               child: const Text('Comment jouer'),
               onPressed: () => context.go('/home/info'),
+            ),
+            const Padding(padding: EdgeInsets.all(10)),
+            ElevatedButton(
+              child: const Text('Scores'),
+              onPressed: () => context.go('/home/scores'),
             ),
           ], // children
         ),

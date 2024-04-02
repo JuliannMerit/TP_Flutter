@@ -15,5 +15,4 @@ class GuessListNotifier extends Notifier<List<int>> {
   }
 }
 
-var intNotifierProvider =
-    NotifierProvider<GuessListNotifier, List<int>>(GuessListNotifier.new);
+var intNotifierProvider = NotifierProvider<GuessListNotifier, List<int>>(GuessListNotifier.new);
