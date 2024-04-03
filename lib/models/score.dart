@@ -8,7 +8,7 @@ class Score {
 
   static int idMax = 0;
 
-  Score({required this.niveau, String? name, required this.score}){
+  Score({required this.niveau, String? name, required this.score}) {
     id = idMax;
     idMax = idMax + 1;
     this.name = name?.isEmpty ?? true ? 'anonymous user' : name!;
