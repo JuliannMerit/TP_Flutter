@@ -41,7 +41,7 @@ class ScoreScreen extends StatelessWidget {
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ))
-                        .toList(),
+                        .toList().reversed.toList(),
                   );
                 } else {
                   return const CircularProgressIndicator();
