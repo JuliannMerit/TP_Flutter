@@ -91,8 +91,7 @@ class GameScreen extends ConsumerWidget {
                             return AlertDialog(
                               title: const Text('Gagné'),
                               content: Text(
-                                  'Vous avez trouvé le nombre mystère.\nVotre score est de ${(level.tryCount -
-                                      intList.length) * 10 * level.id + 10}'),
+                                  'Vous avez trouvé le nombre mystère.\nVotre score est de ${(level.tryCount - intList.length) * 10 * level.id + 10}'),
                               actions: [
                                 FutureBuilder<String>(
                                   future: getUserName(),
@@ -153,20 +152,17 @@ class GameScreen extends ConsumerWidget {
           Column(
             children: [
               ...intList.map(
-                    (e) =>
-                    Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.only(bottom: 10, top: 5),
-                      height: 30,
-                      width: 280,
-                      color: Colors.blue,
-                      child: Text(
-                        'Nombre : ${e.toString()} - ${e == numberToGuess ? 'Trouvé' : e > numberToGuess
-                            ? 'Trop grand'
-                            : 'Trop petit'}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
+                (e) => Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(bottom: 10, top: 5),
+                  height: 30,
+                  width: 280,
+                  color: Colors.blue,
+                  child: Text(
+                    'Nombre : ${e.toString()} - ${e == numberToGuess ? 'Trouvé' : e > numberToGuess ? 'Trop grand' : 'Trop petit'}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
               )
             ],
           ),
