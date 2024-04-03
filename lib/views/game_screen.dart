@@ -26,7 +26,7 @@ class GameScreen extends ConsumerWidget {
     List<int> intList = ref.watch(intNotifierProvider);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Game Screen'),
+          title: const Text('Ecran de jeu'),
         ),
         body: Column(children: [
           const Padding(padding: EdgeInsets.all(10)),

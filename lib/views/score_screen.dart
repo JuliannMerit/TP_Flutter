@@ -13,7 +13,7 @@ class ScoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Score'),
+        title: const Text('Scores'),
       ),
       body: Center(
         child: Column(
